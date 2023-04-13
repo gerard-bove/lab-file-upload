@@ -54,7 +54,7 @@ module.exports = (app) => {
       resave: false,
       saveUninitialized: false,
       store: MongoStore.create({
-        mongoUrl: process.env.MONGODB_URI || "mongodb://localhost/lab-express-irontumblr",
+        mongoUrl: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/lab-express-irontumblr",
       }),
     })
   );
