@@ -10,6 +10,7 @@ const saltRounds = 10;
 
 // Require the User model in order to interact with the database
 const User = require("../models/User.model");
+const Post = require("../models/Post.model");
 
 // require (import) middleware functions
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard.js");
@@ -117,6 +118,43 @@ router.get("/logout", isLoggedIn, (req, res) => {
 
 router.get("/user-profile", isLoggedIn, (req, res) => {
   res.render("users/user-profile", {user: req.session.currentUser});
+});
+
+router.get("/:id/create", (req, res, next) => {
+  const { id } = req.params;
+
+  res.render("users/create-post", {id: id});
+});
+
+router.post("/:id/create", isLoggedIn, fileUploader.single('post-image'), (req, res, next) => {
+  const { id } = req.params;
+  const { content, picName } = req.body;
+
+  Post.create({ content, creatorId: id, picPath: req.file.path, picName})
+    .then(() => res.redirect("/user-profile"))
+    .catch(err => console.log(err))
+});
+
+router.get("/:id/list", isLoggedIn, (req, res, next) => {
+  const { id } = req.params;
+
+  Post.find({creatorId: id})
+  .populate("creatorId")
+  .then(result => {
+    res.render("users/post-list", {posts: result})
+  })
+  .catch(err => console.log(err))
+});
+
+router.get("/:id/detail", isLoggedIn, (req, res, next) => {
+  const { id } = req.params;
+
+  Post.findById(id)
+    .populate("creatorId")
+    .then(result => {
+      res.render("users/post-detail", {post: result})
+    })
+    .catch(err => console.log(err))
 });
 
 module.exports = router;

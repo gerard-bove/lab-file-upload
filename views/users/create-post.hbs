@@ -1,0 +1,20 @@
+<h2>Create post</h2>
+
+<div id="form">
+  <form action="/{{id}}/create" method="POST" enctype="multipart/form-data">
+
+    <label> Content
+      <textarea name="content" cols="30" rows="4" placeholder="Some text..."> </textarea>
+    </label>
+
+    <label style="border: solid black 2px; padding: 5px"> Add photo
+      <input type="text" name="picName" placeholder="picture name">
+      <input type="file" name="post-image" />
+    </label>
+
+    <button type="submit">Create post</button>
+
+  </form>
+</div>
+
+<a href="/user-profile" class="btn btn-primary">Go back</a>
